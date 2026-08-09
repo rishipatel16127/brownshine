@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARIVESH AI - Environmental Compliance & Clearance Suite</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet.js Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-seedling brand-icon"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>PARIVESH <span class="ai-badge">AI</span></h1>
+                    <p>Compliance Suite</p>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active" data-tab="dashboard">
+                        <a href="#dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                    </li>
+                    <li data-tab="emission-checker">
+                        <a href="#emission-checker"><i class="fa-solid fa-smog"></i> Emission Checker</a>
+                    </li>
+                    <li data-tab="gis-screener">
+                        <a href="#gis-screener"><i class="fa-solid fa-map-location-dot"></i> GIS Proximity</a>
+                    </li>
+                    <li data-tab="category-classifier">
+                        <a href="#category-classifier"><i class="fa-solid fa-diagram-project"></i> Category Predictor</a>
+                    </li>
+                    <li data-tab="regulations">
+                        <a href="#regulations"><i class="fa-solid fa-gavel"></i> CPCB Library</a>
+                    </li>
+                    <li data-tab="state-norms">
+                        <a href="#state-norms"><i class="fa-solid fa-landmark-dome"></i> State Norms</a>
+                    </li>
+                    <li data-tab="pdf-auditor">
+                        <a href="#pdf-auditor"><i class="fa-solid fa-file-shield"></i> PDF Auditor</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div class="user-info">
+                        <h4>Environmental Officer</h4>
+                        <p>MoEF&CC Verified</p>
+                    </div>
+                </div>
+                <div class="status-indicator">
+                    <span class="pulse-dot"></span>
+                    <span class="status-text">Connected to CPCB Live Database</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="header-left">
+                    <h2 id="page-title">Compliance Dashboard</h2>
+                    <p id="page-subtitle">Real-time emission verification & clearance assistance</p>
+                </div>
+                <div class="header-right">
+                    <div class="notification-bell">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge">2</span>
+                    </div>
+                    <div class="current-date">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span id="live-date">July 9, 2026</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content Container -->
+            <div class="content-body">
+                
+                <!-- 1. DASHBOARD VIEW -->
+                <section id="dashboard" class="tab-content active">
+                    <!-- Quick Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card card-glow">
+                            <div class="stat-icon em-bg">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Stack Status</h3>
+                                <p class="stat-value text-success" id="dash-stack-status">Compliant</p>
+                                <p class="stat-desc">Based on latest verification</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon gis-bg">
+                                <i class="fa-solid fa-location-crosshairs"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Buffer Clearance</h3>
+                                <p class="stat-value text-warning" id="dash-buffer-status">Warning (8.4 km)</p>
+                                <p class="stat-desc">Nearest: Sanjay Gandhi NP</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon cat-bg">
+                                <i class="fa-solid fa-tags"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Predicted Category</h3>
+                                <p class="stat-value text-accent" id="dash-category-status">Category B1</p>
+                                <p class="stat-desc">Requires State EIA clearance</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon env-bg">
+                                <i class="fa-solid fa-leaf"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Overall Eco Score</h3>
+                                <p class="stat-value" id="dash-eco-score">82 / 100</p>
+                                <p class="stat-desc">Weighted compliance index</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Dashboard Visualizer Grid -->
+                    <div class="dashboard-grid">
+                        <!-- Left Panel: Summary Chart -->
+                        <div class="glass-panel main-chart-panel">
+                            <div class="panel-header">
+                                <h3><i class="fa-solid fa-chart-column"></i> Emission vs CPCB Limits Comparison</h3>
+                                <span class="badge badge-green">Live Metrics</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="dashboardChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Checklist & Notifications -->
+                        <div class="glass-panel list-panel">
+                            <div class="panel-header">
+                                <h3><i class="fa-solid fa-circle-check"></i> Pre-Screening Checklist</h3>
+                            </div>
+                            <div class="checklist">
+                                <div class="check-item done">
+                                    <div class="check-box"><i class="fa-solid fa-check"></i></div>
+                                    <div class="check-label">
+                                        <h4>Identify Industrial Category</h4>
+                                        <p>Thermal Power Plant capacity defined</p>
+                                    </div>
+                                </div>
+                                <div class="check-item done">
+                                    <div class="check-box"><i class="fa-solid fa-check"></i></div>
+                                    <div class="check-label">
+                                        <h4>Input Stack Emissions</h4>
+                                        <p>PM, SO2, NOx figures recorded</p>
+                                    </div>
+                                </div>
+                                <div class="check-item warning">
+                                    <div class="check-box"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                    <div class="check-label">
+                                        <h4>Buffer Clearance Required</h4>
+                                        <p>Project is within 10 km of National Park boundary</p>
+                                    </div>
+                                </div>
+                                <div class="check-item pending">
+                                    <div class="check-box"><i class="fa-regular fa-circle"></i></div>
+                                    <div class="check-label">
+                                        <h4>Form-1 Preparation</h4>
+                                        <p>Submit pre-filled clearances to state authority</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. EMISSION CHECKER VIEW -->
+                <section id="emission-checker" class="tab-content">
+                    <div class="split-view">
+                        <!-- Inputs Panel -->
+                        <div class="glass-panel input-panel">
+                            <div class="panel-header">
+                                <h3><i class="fa-solid fa-sliders"></i> Stack Emission Inputs</h3>
+                            </div>
+                            <form id="emission-form" class="compliance-form">
+                                <div class="form-group">
+                                    <label for="industry-select">Select Industrial Sector</label>
+                                    <select id="industry-select" class="form-control">
+                                        <option value="thermal-power-new">Thermal Power Plant (Post-2017)</option>
+                                        <option value="thermal-power-old">Thermal Power Plant (Pre-2017)</option>
+                                        <option value="cement-kiln">Cement Plants (Kiln emissions)</option>
+                                        <option value="iron-steel">Iron & Steel (Sinter Plant)</option>
+                                        <option value="oil-refinery">Oil Refinery (FCCU Stacks)</option>
+                                        <option value="sugar-boiler">Sugar Industry (Boilers)</option>
+                                        <option value="brick-kiln">Brick Kiln (Zig-Zag Type)</option>
+                                        <option value="fertilizer-urea">Fertilizer (Urea Plant, Post-1992)</option>
+                                        <option value="pulp-paper">Pulp &amp; Paper Industry</option>
+                                        <option value="aluminium-smelter">Aluminium Smelter (Calcination/Pot Room)</option>
+                                        <option value="glass-industry">Glass Industry</option>
+                                        <option value="lime-kiln">Lime Kiln (5&ndash;40 TPD)</option>
+                                        <option value="industrial-boiler">Industrial Boiler (Small, &lt;2 T/hr)</option>
+                                        <option value="foundry-cupola">Foundry (Cupola Furnace, &lt;3 T/hr)</option>
+                                        <option value="coke-oven">Coke Oven Plant</option>
+                                        <option value="ceramic-industry">Ceramic Industry</option>
+                                        <option value="pharmaceutical">Pharmaceutical (Mfg &amp; Formulation)</option>
+                                        <option value="custom-other">Other / Custom Industry (Manual Limits)</option>
+                                    </select>
+                                    <p class="input-help" style="margin-top: 8px; font-size: 11px; color: var(--text-dim);">
+                                        <i class="fa-solid fa-circle-info"></i> Limits sourced from CPCB Schedule VI (EPA, 1986). Where no industry-specific concentration standard exists, the general 150 mg/Nm&sup3; PM standard is applied. Always cross-check against the project's actual EC/CTO consent conditions.
+                                    </p>
+                                </div>
+
+                                <div class="form-group hidden" id="custom-limits-panel" style="border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; background: rgba(255,255,255,0.02);">
+                                    <label style="margin-bottom: 8px; display:block;"><i class="fa-solid fa-sliders"></i> Custom Limits <span style="font-weight:400; color: var(--text-dim);">(mg/Nm&sup3; &mdash; leave blank to skip a parameter)</span></label>
+                                    <div class="form-row-group">
+                                        <div class="form-group">
+                                            <label for="custom-limit-pm" style="font-size:11px;">PM Limit</label>
+                                            <input type="number" min="0" step="0.1" id="custom-limit-pm" class="form-control" placeholder="e.g. 150">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="custom-limit-so2" style="font-size:11px;">SO&#8322; Limit</label>
+                                            <input type="number" min="0" step="0.1" id="custom-limit-so2" class="form-control" placeholder="e.g. 100">
+                                        </div>
+                                    </div>
+                                    <div class="form-row-group">
+                                        <div class="form-group">
+                                            <label for="custom-limit-nox" style="font-size:11px;">NOx Limit</label>
+                                            <input type="number" min="0" step="0.1" id="custom-limit-nox" class="form-control" placeholder="e.g. 100">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="custom-limit-co" style="font-size:11px;">CO Limit</label>
+                                            <input type="number" min="0" step="0.1" id="custom-limit-co" class="form-control" placeholder="Optional">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row-group">
+                                    <div class="form-group">
+                                        <label for="input-pm">Particulate Matter (PM) <span class="unit">(mg/Nm³)</span></label>
+                                        <input type="number" id="input-pm" value="25" min="0" max="1000" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-so2">Sulfur Dioxide (SO₂) <span class="unit">(mg/Nm³)</span></label>
+                                        <input type="number" id="input-so2" value="90" min="0" max="2000" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-row-group">
+                                    <div class="form-group">
+                                        <label for="input-nox">Nitrogen Oxides (NOₓ) <span class="unit">(mg/Nm³)</span></label>
+                                        <input type="number" id="input-nox" value="280" min="0" max="2000" class="form-control">
+                                    </div>
+                                    <div class="form-group" id="co-group">
+                                        <label for="input-co">Carbon Monoxide (CO) <span class="unit">(mg/Nm³)</span></label>
+                                        <input type="number" id="input-co" value="120" min="0" max="1000" class="form-control">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fa-solid fa-magnifying-glass-chart"></i> Run Compliance Audit
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Results Panel -->
+                        <div class="glass-panel results-panel">
+                            <div class="panel-header">
+                                <h3><i class="fa-solid fa-square-poll-vertical"></i> Audit Results & AI Mitigation</h3>
+                            </div>
+                            
+                            <div class="audit-summary">
+                                <div class="status-banner success" id="audit-banner">
+                                    <div class="banner-icon"><i class="fa-solid fa-circle-check"></i></div>
+                                    <div class="banner-text">
+                                        <h4 id="audit-status-title">All Emissions Compliant</h4>
+                                        <p id="audit-status-desc">All parameters satisfy Central Pollution Control Board guidelines.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="audit-metrics">
+                                <h4>Detailed Parameter Analysis</h4>
+                                <div class="parameter-cards" id="parameter-cards-container">
+                                    <!-- Dynamic list of parameters -->
+                                </div>
+                            </div>
+
+                            <div class="ai-recommendations">
+                                <div class="ai-header">
+                                    <i class="fa-solid fa-robot ai-logo-icon"></i>
+                                    <h4>PARIVESH AI Recommendation Engine</h4>
+                                </div>
+                                <div class="ai-content" id="ai-mitigation-content">
+                                    <p>Based on your input values, the plant operates cleanly. Continue standard bag filter maintenance and verify regular stack monitoring reports every 15 days.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. GIS PROXIMITY SCREENER VIEW -->
+                <section id="gis-screener" class="tab-content">
+                    <div class="split-view">
+                        <!-- Controls -->
+                        <div class="glass-panel input-panel">
+                            <div class="panel-header">
+                                <h3><i class="fa-solid fa-earth-asia"></i> Proximity Controls</h3>
+                            </div>
+                            <form id="gis-form" class="compliance-form">
+                                <div class="form-group">
+                                    <label for="project-name">Project / Site Name</label>
+                                    <input type="text" id="project-name" value="Greenfield Infrastructure Phase 1" class="form-control">
+                                </div>
+
+                                <div class="form-row-group">
+                                    <div class="form-group">
+                                        <label for="project-lat">Latitude <span class="unit">(Decimal Degrees)</span></label>
+                                        <input type="number" id="project-lat" value="19.2980" step="0.0001" min="8.0" max="37.0" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="project-lng">Longitude <span class="unit">(Decimal Degrees)</span></label>
+                                        <input type="number" id="project-lng" value="72.8420" step="0.0001" min="68.0" max="97.0" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="quick-presets">
+                                    <label>Or select pre-defined site location:</label>
+                                    <div class="preset-buttons">
+                                        <button type="button" class="btn btn-outline btn-sm preset-btn" data-lat="19.2980" data-lng="72.8420" data-name="Mumbai Western Suburb Site">Near Sanjay Gandhi NP</button>
+                                        <button type="button" class="btn btn-outline btn-sm preset-btn" data-lat="21.2000" data-lng="70.8000" data-name="Saurashtra Industrial Hub">Near Gir Forest</button>
+                                        <button type="button" class="btn btn-outline btn-sm preset-btn" data-lat="29.6200" data-lng="78.8500" data-name="Uttarakhand Eco-Resort Project">Near Corbett Reserve</button>
+                                        <button type="button" class="btn btn-outline btn-sm preset-btn" data-lat="13.1500" data-lng="80.2000" data-name="Chennai Industrial Port Expansion">Near Guindy NP</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;">
+                                    <label style="display:flex; align-items:center; justify-content:space-between;">
+                                        <span><i class="fa-solid fa-map-pin"></i> Custom Protected Area <span style="font-weight:400; color: var(--text-dim);">(sanctuary/reserve not in the built-in list)</span></span>
+                                    </label>
+                                    <p class="input-help" style="margin: 4px 0 8px; font-size: 11px; color: var(--text-dim);">
+                                        <i class="fa-solid fa-circle-info"></i> Only a handful of major national parks are built in. Add any wildlife sanctuary, bird sanctuary, tiger/biosphere reserve, or conservation reserve here (with its coordinates) and it's included in the nearest-protected-area check below, same as the built-in ones.
+                                    </p>
+                                    <div style="display:flex; flex-wrap:wrap; gap: 8px; align-items:end;">
+                                        <div style="flex: 1 1 160px; min-width: 140px;">
+                                            <label for="gis-custom-area-name" style="font-size:10.5px; font-weight:500;">Name</label>
+                                            <input type="text" id="gis-custom-area-name" class="form-control" placeholder="e.g. Thol Bird Sanctuary">
+                                        </div>
+                                        <div style="flex: 1 1 100px; min-width: 90px;">
+                                            <label for="gis-custom-area-lat" style="font-size:10.5px; font-weight:500;">Latitude</label>
+                                            <input type="number" step="0.0001" id="gis-custom-area-lat" class="form-control" placeholder="23.1390">
+                                        </div>
+                                        <div style="flex: 1 1 100px; min-width: 90px;">
+                                            <label for="gis-custom-area-lng" style="font-size:10.5px; font-weight:500;">Longitude</label>
+                                            <input type="number" step="0.0001" id="gis-custom-area-lng" class="form-control" placeholder="72.4136">
+                                        </div>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btn-add-gis-area" style="flex: 0 0 auto; padding: 8px 16px; white-space:nowrap;"><i class="fa-solid fa-plus"></i> Add</button>
+                                    </div>
+                                    <div id="gis-custom-areas-list" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;"></div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fa-solid fa-location-dot"></i> Check ESZ Buffer Proximity
+                                </button>
+                            </form>
+
+                            <!-- Results Summary card -->
+                            <div class="gis-result-card" id="gis-result-summary">
+                                <h4>Buffer Check Output</h4>
+                                <div class="gis-stat">
+                                    <span class="label">Distance to Nearest Sanctuary:</span>
+                                    <span class="value" id="gis-dist-val">8.42 km</span>
+                                </div>
+                                <div class="gis-stat">
+                                    <span class="label">Target Protected Area:</span>
+                                    <span class="value" id="gis-park-val">Sanjay Gandhi National Park</span>
+                                </div>
+                                <div class="gis-stat flex-column">
+                                    <span class="label">Compliance Verdict:</span>
+                                    <div class="compliance-badge badge-warning" id="gis-verdict-badge">Warning: Within 10km Buffer</div>
+                                </div>
+                                <div class="alert-box alert-warning" id="gis-alert-desc">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    <span>Since the site is located within the 10km Eco-Sensitive Zone, clearances must be obtained from the Standing Committee of the National Board for Wildlife (NBWL) under PARIVESH.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map Panel -->
+                        <div class="glass-panel map-panel">
+                            <div class="panel-header">
+                                <h3><i class="fa-solid fa-map"></i> Leaflet Geographic Information System (GIS)</h3>
+                                <div class="map-legend">
+                                    <span class="legend-item"><span class="legend-color site"></span> Project Site</span>
+                                    <span class="legend-item"><span class="legend-color forest"></span> Protected Park</span>
+                                    <span class="legend-item"><span class="legend-color buffer"></span> 10km Buffer Zone</span>
+                                </div>
+                            </div>
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. CATEGORY CLASSIFIER VIEW -->
+                <section id="category-classifier" class="tab-content">
+                    <div class="classifier-container glass-panel">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-wand-magic-sparkles"></i> AI-Assisted Project Categorization (Schedule-I)</h3>
+                        </div>
+
+                        <div class="wizard-stepper">
+                            <div class="step active" id="step-ind-1">
+                                <span class="step-num">1</span>
+                                <span class="step-lbl">Sector Select</span>
+                            </div>
+                            <div class="step" id="step-ind-2">
+                                <span class="step-num">2</span>
+                                <span class="step-lbl">Project Size</span>
+                            </div>
+                            <div class="step" id="step-ind-3">
+                                <span class="step-num">3</span>
+                                <span class="step-lbl">Sensitivity Details</span>
+                            </div>
+                            <div class="step" id="step-ind-4">
+                                <span class="step-num">4</span>
+                                <span class="step-lbl">Classification Summary</span>
+                            </div>
+                        </div>
+
+                        <div class="wizard-content">
+                            <!-- STEP 1: SECTOR -->
+                            <div class="wizard-panel active" id="wizard-step-1">
+                                <h4>Step 1: Choose Environmental Sector Listing</h4>
+                                <p class="section-desc">Select the category matching your project activity according to the EIA Notification 2006 Schedule.</p>
+                                
+                                <div class="sector-cards">
+                                    <div class="sector-card selected" data-sector="mining">
+                                        <i class="fa-solid fa-mountain"></i>
+                                        <h5>Mining of Minerals</h5>
+                                        <p>Coal, metallic ores, non-metallic minerals, sand mining</p>
+                                    </div>
+                                    <div class="sector-card" data-sector="power">
+                                        <i class="fa-solid fa-bolt"></i>
+                                        <h5>Thermal Power Plants</h5>
+                                        <p>Coal, lignite, gas, or biomass-based electricity plants</p>
+                                    </div>
+                                    <div class="sector-card" data-sector="cement">
+                                        <i class="fa-solid fa-trowel-bricks"></i>
+                                        <h5>Cement Plants</h5>
+                                        <p>Standalone clinker grinding units and integrated kilns</p>
+                                    </div>
+                                    <div class="sector-card" data-sector="infrastructure">
+                                        <i class="fa-solid fa-road"></i>
+                                        <h5>Infrastructure Projects</h5>
+                                        <p>Highways, expressways, airports, ports, building townships</p>
+                                    </div>
+                                    <div class="sector-card" data-sector="manual">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <h5>Other / I'll Classify Manually</h5>
+                                        <p>Project type isn't listed &mdash; skip the auto-calculated thresholds and set the category yourself</p>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-actions">
+                                    <span></span>
+                                    <button class="btn btn-primary btn-next" data-next="2">Next Step <i class="fa-solid fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- STEP 2: SIZE -->
+                            <div class="wizard-panel" id="wizard-step-2">
+                                <h4>Step 2: Define Project Thresholds / Capacity</h4>
+                                <p class="section-desc">EIA notification classes projects depending on production size, area, or capacity indicators.</p>
+
+                                <!-- Dynamic Size Inputs for Mining -->
+                                <div class="dynamic-size-group" id="size-mining">
+                                    <div class="form-group">
+                                        <label for="mining-lease-area">Mining Lease Area <span class="unit">(Hectares)</span></label>
+                                        <input type="number" id="mining-lease-area" value="45" min="1" max="10000" class="form-control">
+                                        <p class="input-help">Category limits: &gt; 100 Ha = Cat A, 5 - 100 Ha = Cat B1, &lt; 5 Ha = Cat B2</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mineral Classification Type</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label">
+                                                <input type="radio" name="mineral-type" value="major" checked> Major Mineral (Coal, Iron Ore)
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="mineral-type" value="minor"> Minor Mineral (Sand, Clay)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Size Inputs for Power -->
+                                <div class="dynamic-size-group hidden" id="size-power">
+                                    <div class="form-group">
+                                        <label for="power-capacity">Generation Capacity <span class="unit">(MW)</span></label>
+                                        <input type="number" id="power-capacity" value="150" min="1" max="5000" class="form-control">
+                                        <p class="input-help">Category limits: &gt; 500 MW = Cat A (Coal), 50 - 500 MW = Cat B1</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Power Source Fuel</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label">
+                                                <input type="radio" name="power-fuel" value="coal" checked> Coal / Lignite
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="power-fuel" value="biomass"> Biomass / Gas
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Size Inputs for Cement -->
+                                <div class="dynamic-size-group hidden" id="size-cement">
+                                    <div class="form-group">
+                                        <label for="cement-capacity">Production Capacity <span class="unit">(Million Tons Per Annum - MTPA)</span></label>
+                                        <input type="number" id="cement-capacity" value="0.8" step="0.1" min="0.1" max="10" class="form-control">
+                                        <p class="input-help">Grinding-only units &lt; 1.0 MTPA are usually Category B2; Integrated kilns are Cat A or B1.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Size Inputs for Infrastructure -->
+                                <div class="dynamic-size-group hidden" id="size-infrastructure">
+                                    <div class="form-group">
+                                        <label for="infra-built-area">Built-up Area <span class="unit">(sq. meters)</span></label>
+                                        <input type="number" id="infra-built-area" value="145000" min="5000" max="10000000" class="form-control">
+                                        <p class="input-help">Category limits: &gt; 1,50,000 sq.m = Cat B1, 20,000 - 1,50,000 sq.m = Cat B2</p>
+                                    </div>
+                                </div>
+
+                                <!-- Manual mode notice (no auto-computed thresholds) -->
+                                <div class="dynamic-size-group hidden" id="size-manual">
+                                    <div class="alert-box alert-warning" style="align-items:flex-start;">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        <span>Manual mode selected &mdash; there's no computed size threshold for an unlisted project type. Continue to the next step, where you'll set the final Category, Appraisal Authority and EIA requirement yourself.</span>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-actions">
+                                    <button class="btn btn-outline btn-prev" data-prev="1"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+                                    <button class="btn btn-primary btn-next" data-next="3">Next Step <i class="fa-solid fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- STEP 3: SENSITIVITY -->
+                            <div class="wizard-panel" id="wizard-step-3">
+                                <h4>Step 3: Site Environmental Sensitivity Checks</h4>
+                                <p class="section-desc">EIA guidelines feature "General Conditions." Any Cat B project located close to certain sensitive zones triggers automatic upgrade to Category A.</p>
+                                
+                                <div class="sensitivity-checklist">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="check-interstate">
+                                        <span class="checkmark"></span>
+                                        <span class="label-text">
+                                            <strong>Interstate / International Boundary</strong>
+                                            <p>Located within 15 km of a state boundary or international boundary</p>
+                                        </span>
+                                    </label>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="check-protected">
+                                        <span class="checkmark"></span>
+                                        <span class="label-text">
+                                            <strong>National Park / Sanctuary Buffer</strong>
+                                            <p>Located within 10 km of a protected area or eco-sensitive zone</p>
+                                        </span>
+                                    </label>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="check-critically-polluted">
+                                        <span class="checkmark"></span>
+                                        <span class="label-text">
+                                            <strong>Critically Polluted Area (CPA)</strong>
+                                            <p>Located in an industrial cluster categorized as critically polluted by CPCB</p>
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <!-- Manual classification override — only shown for the Other/Manual sector -->
+                                <div class="hidden" id="manual-classification-panel" style="margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 16px;">
+                                    <h5 style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 10px; color: var(--text-secondary);"><i class="fa-solid fa-pen-to-square"></i> Set Classification Manually</h5>
+                                    <div class="form-group">
+                                        <label for="manual-category-select">Clearance Category</label>
+                                        <select id="manual-category-select" class="form-control">
+                                            <option value="Category A">Category A</option>
+                                            <option value="Category B1">Category B1</option>
+                                            <option value="Category B2">Category B2</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="manual-authority-input">Appraisal Authority</label>
+                                        <input type="text" id="manual-authority-input" class="form-control" placeholder="e.g. State Environmental Impact Assessment Authority (SEIAA)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="manual-eia-input">EIA Requirement</label>
+                                        <input type="text" id="manual-eia-input" class="form-control" placeholder="e.g. Yes, full EIA study & public hearing required">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="manual-notes-input">Classification Notes <span style="font-weight:400; color: var(--text-dim);">(optional)</span></label>
+                                        <textarea id="manual-notes-input" class="form-control" rows="2" placeholder="Any rationale you'd like recorded in the summary, e.g. project type and applicable notification"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-actions">
+                                    <button class="btn btn-outline btn-prev" data-prev="2"><i class="fa-solid fa-chevron-left"></i> Previous</button>
+                                    <button class="btn btn-primary btn-next" id="btn-predict-category" data-next="4">Predict Compliance Category <i class="fa-solid fa-bolt"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- STEP 4: SUMMARY -->
+                            <div class="wizard-panel" id="wizard-step-4">
+                                <div class="prediction-result">
+                                    <div class="result-header">
+                                        <div class="verdict-icon" id="verdict-class-icon"><i class="fa-solid fa-tags"></i></div>
+                                        <div class="verdict-title-wrap">
+                                            <p>Final Clearance Category Classification</p>
+                                            <h3 id="verdict-class-title">Category B1</h3>
+                                        </div>
+                                    </div>
+                                    <div class="verdict-details-grid">
+                                        <div class="detail-card">
+                                            <h5>Appraisal Authority</h5>
+                                            <p id="verdict-authority">State Environmental Impact Assessment Authority (SEIAA)</p>
+                                        </div>
+                                        <div class="detail-card">
+                                            <h5>EIA Requirement</h5>
+                                            <p id="verdict-eia">Yes. Full EIA Study, Environment Management Plan (EMP) & Public Hearing required.</p>
+                                        </div>
+                                    </div>
+                                    <div class="verdict-reasoning">
+                                        <h5>Classification Rationale:</h5>
+                                        <ul id="verdict-reasons-list">
+                                            <li>Project type is Mineral Mining.</li>
+                                            <li>Mining lease area (45 Ha) is between 5 and 100 Hectares.</li>
+                                            <li>General Conditions not triggered (Not in ESZ, Border, or CPA).</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="verdict-actions">
+                                        <button class="btn btn-success" id="btn-sync-dashboard"><i class="fa-solid fa-rotate"></i> Apply to Dashboard & Export</button>
+                                        <button class="btn btn-outline" id="btn-reset-wizard"><i class="fa-solid fa-undo"></i> Start New Analysis</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. REGULATIONS VIEW -->
+                <section id="regulations" class="tab-content">
+                    <div class="regulations-container">
+                        <div class="glass-panel reg-search-panel">
+                            <div class="panel-header">
+                                <h3><i class="fa-solid fa-book-open"></i> Environment Protection Act (EPA) & CPCB Standards</h3>
+                            </div>
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                <input type="text" id="reg-search-input" placeholder="Search regulations, G.S.R notifications, CPCB standards..." class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="regulations-grid" id="reg-cards-container">
+                            <!-- Card 1 -->
+                            <div class="glass-panel reg-card" data-title="environment protection act 1986 epa cpcb standards">
+                                <div class="reg-tag">STATUTORY ACT</div>
+                                <h4>Environment (Protection) Act, 1986</h4>
+                                <p>The umbrella act empowering the central government to set standards for environmental quality, emissions, and waste discharges.</p>
+                                <div class="reg-footer">
+                                    <span>Schedule VI General Standards</span>
+                                    <a href="https://parivesh.nic.in" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> Official Gazette</a>
+                                </div>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="glass-panel reg-card" data-title="thermal power plant emission standards gsr 774 nox pm so2">
+                                <div class="reg-tag">G.S.R 774(E)</div>
+                                <h4>Thermal Power Emission Standards</h4>
+                                <p>Notification setting rigorous limits for coal-fired power stations: PM to 30 mg/Nm³, SO2 to 100-200 mg/Nm³, and NOx to 100 mg/Nm³ based on commissioning dates.</p>
+                                <div class="reg-footer">
+                                    <span>Applicable for Stacks &gt; 50MW</span>
+                                    <a href="https://parivesh.nic.in" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> Official Gazette</a>
+                                </div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="glass-panel reg-card" data-title="cement industries emission standards pm so2 nox">
+                                <div class="reg-tag">G.S.R 496(E)</div>
+                                <h4>Cement Plant Emission Guidelines</h4>
+                                <p>Statutory standards limiting Particulate Matter to 30 mg/Nm³, SO2 to 100 mg/Nm³ (with/without bypass), and NOx to 600-800 mg/Nm³ depending on rotary kiln technologies.</p>
+                                <div class="reg-footer">
+                                    <span>MoEF&CC 2016 Revision</span>
+                                    <a href="https://parivesh.nic.in" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> Official Gazette</a>
+                                </div>
+                            </div>
+                            <!-- Card 4 -->
+                            <div class="glass-panel reg-card" data-title="brick kiln emission standards zigzag flyash particulate matter">
+                                <div class="reg-tag">G.S.R 143(E)</div>
+                                <h4>Brick Kiln Standards (2022 Amendment)</h4>
+                                <p>Notification mandating the transition of all brick kilns in India to zig-zag chimney technology with a reduced Particulate Matter (PM) limit of 250 mg/Nm³ (FCK) or 50 mg/Nm³ (Zig-zag).</p>
+                                <div class="reg-footer">
+                                    <span>CPCB Clean Air Directive</span>
+                                    <a href="https://parivesh.nic.in" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> Official Gazette</a>
+                                </div>
+                            </div>
+                            <!-- Card 5 -->
+                            <div class="glass-panel reg-card" data-title="eia notification 2006 environment impact assessment clearances schedule 1">
+                                <div class="reg-tag">S.O. 1533</div>
+                                <h4>EIA Notification, 2006</h4>
+                                <p>Regulatory framework governing the entire process of seeking environmental clearance (EC) for Category A, B1 and B2 development projects in India.</p>
+                                <div class="reg-footer">
+                                    <span>Schedule-I Category thresholds</span>
+                                    <a href="https://parivesh.nic.in" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> Official Gazette</a>
+                                </div>
+                            </div>
+                            <!-- Card 6 -->
+                            <div class="glass-panel reg-card" data-title="national clean air programme ncap cpcb ambient air quality standards">
+                                <div class="reg-tag">NCAP DIRECTIVE</div>
+                                <h4>National Clean Air Programme</h4>
+                                <p>Policy targeting a 20% to 30% reduction in PM10 and PM2.5 concentrations in 131 non-attainment cities across India by 2026.</p>
+                                <div class="reg-footer">
+                                    <span>Ambient Monitoring Focus</span>
+                                    <a href="https://parivesh.nic.in" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> Official Gazette</a>
+                                </div>
+                            </div>
+                            <!-- Card 7 -->
+                            <div class="glass-panel reg-card" data-title="state pollution control board gpcb mpcb tnpcb consent to establish operate cto cte cepi critically polluted areas">
+                                <div class="reg-tag">SPCB / CTO-CTE</div>
+                                <h4>State Boards & Consent Mechanism (incl. GPCB)</h4>
+                                <p>State Pollution Control Boards (GPCB, MPCB, TNPCB, UPPCB, RPCB, KSPCB, WBPCB, APPCB/TSPCB, etc.) enforce CPCB Schedule VI as the statutory floor through Consent to Establish (CTE) and Consent to Operate (CTO). The unit's own consent order is the legally binding limit and can be stricter than the national schedule, especially inside CPCB-notified Critically Polluted Areas (CEPI &gt; 70) &mdash; e.g. Gujarat's Vapi, Ankleshwar, Vatva-Narol, Ahmedabad (Naroda/Odhav), Bhavnagar and Junagadh clusters. Always audit against the specific CTO/EC figures, not just the general schedule.</p>
+                                <div class="reg-footer">
+                                    <span>Air (Prevention & Control of Pollution) Act, 1981</span>
+                                    <a href="https://gpcb.gujarat.gov.in" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> GPCB Official Site</a>
+                                </div>
+                            </div>
+
+                            <!-- Card 8 -->
+                            <div class="glass-panel reg-card" data-title="caqm delhi ncr stricter particulate matter standard regional variance example">
+                                <div class="reg-tag">Documented Regional Example</div>
+                                <h4>CAQM Delhi-NCR: Stricter PM Standard (Real Example)</h4>
+                                <p>A concrete, dated example that regional standards genuinely can differ from CPCB Schedule VI: in February 2026 the Commission for Air Quality Management (CAQM) issued a statutory direction setting a uniform particulate matter emission standard of <strong>50 mg/Nm&sup3;</strong> for identified industries across Delhi-NCR &mdash; stricter than the general CPCB baseline &mdash; based on CPCB/IIT-Kanpur technical study. This is exactly the kind of figure that belongs in Manual Limit Override rather than a generic default, since it applies only to specific identified industries in a specific region, not nationwide.</p>
+                                <div class="reg-footer">
+                                    <span>CAQM Statutory Direction, Feb 2026</span>
+                                    <a href="https://www.newsonair.gov.in/caqm-prescribes-stricter-emission-norms-for-industries-across-delhi-ncr" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> Read Notice</a>
+                                </div>
+                            </div>
+
+                            <!-- Card 9 -->
+                            <div class="glass-panel reg-card" data-title="cpcb water effluent discharge standards bod cod tss inland surface water schedule vi">
+                                <div class="reg-tag">CPCB Schedule VI &mdash; Water</div>
+                                <h4>General Effluent Discharge Standards (Water)</h4>
+                                <p>CPCB's Schedule VI general standards for liquid effluent discharge, under the Water (Prevention & Control of Pollution) Act, 1974 and Environment (Protection) Rules, 1986, vary by receiving medium. For discharge into <strong>inland surface water</strong>: BOD &le; 30 mg/l, COD &le; 250 mg/l, TSS &le; 100 mg/l. Public sewer discharge is more lenient (e.g. BOD up to 350 mg/l), reflecting lower sensitivity than open water bodies. These are national baseline figures &mdash; use Custom Parameters (Water/Effluent category) to check a report's own BOD/COD/TSS/pH readings against them, or against a stricter site-specific CTO figure.</p>
+                                <div class="reg-footer">
+                                    <span>Environment (Protection) Rules, 1986 &mdash; Schedule VI</span>
+                                    <a href="https://cpcb.nic.in" target="_blank"><i class="fa-solid fa-up-right-from-square"></i> CPCB Official Site</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5B. STATE POLLUTION CONTROL BOARD NORMS MANAGER -->
+                <section id="state-norms" class="tab-content">
+                    <div class="glass-panel" style="margin-bottom: 24px;">
+                        <div class="panel-header">
+                            <h3><i class="fa-solid fa-building-columns"></i> State Pollution Control Boards (SPCB / GPCB) Norms Manager</h3>
+                            <div style="display:flex; gap:8px;">
+                                <button type="button" class="btn btn-outline btn-sm" id="btn-sn-refresh" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                                <button type="button" class="btn btn-primary btn-sm" id="btn-sn-add-board" style="padding: 6px 14px; font-size: 12px;"><i class="fa-solid fa-plus"></i> Add Custom State SPCB</button>
+                            </div>
+                        </div>
+                        <p class="input-help" style="margin: 0 0 18px; font-size: 12px; color: var(--text-dim);">
+                            <i class="fa-solid fa-circle-info"></i> CPCB Schedule VI values are shown as the default (tagged <strong>CPCB</strong>) for every industry. Where you know the actual figure from a specific consent order or a state-specific notification, click <strong>Edit State Overrides</strong> and enter it &mdash; it's tagged <strong>Override</strong> and saved in this browser so it carries forward automatically next time you audit that state + industry combination. These are your own saved reference values, not a claim of official published state-wide standards &mdash; always verify against the project's actual CTO/EC for legal purposes.
+                        </p>
+
+                        <div style="display:grid; grid-template-columns: 220px 1fr; gap: 22px; align-items:start;">
+                            <!-- State board selector list -->
+                            <div id="sn-board-list" style="display:flex; flex-direction:column; gap: 8px;"></div>
+
+                            <!-- Selected state's industry x parameter table -->
+                            <div>
+                                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom: 6px;">
+                                    <div>
+                                        <h4 id="sn-board-title" style="font-family: var(--font-heading); font-size: 20px; color: var(--color-accent); margin:0;">Central Pollution Control Board (CPCB)</h4>
+                                        <p id="sn-board-desc" style="font-size: 12.5px; color: var(--text-dim); margin: 4px 0 0;">National baseline standard under Schedule VI (EPA, 1986).</p>
+                                    </div>
+                                    <button type="button" class="btn btn-outline btn-sm" id="btn-sn-edit-toggle" style="padding: 6px 14px; font-size: 12px; white-space:nowrap;"><i class="fa-solid fa-pen"></i> Edit State Overrides</button>
+                                </div>
+
+                                <div style="overflow-x:auto; border: 1px solid var(--border-glass); border-radius: 10px;">
+                                    <table class="sn-table" style="width:100%; border-collapse: collapse; font-size: 13px;">
+                                        <thead>
+                                            <tr style="background: rgba(255,255,255,0.03); text-align:left;">
+                                                <th style="padding: 10px 14px; font-size: 11px; letter-spacing:0.03em; color: var(--text-dim);">INDUSTRIAL SECTOR</th>
+                                                <th style="padding: 10px 14px; font-size: 11px; letter-spacing:0.03em; color: var(--text-dim);">PM LIMIT (mg/Nm&sup3;)</th>
+                                                <th style="padding: 10px 14px; font-size: 11px; letter-spacing:0.03em; color: var(--text-dim);">SO&#8322; LIMIT (mg/Nm&sup3;)</th>
+                                                <th style="padding: 10px 14px; font-size: 11px; letter-spacing:0.03em; color: var(--text-dim);">NOx LIMIT (mg/Nm&sup3;)</th>
+                                                <th style="padding: 10px 14px; font-size: 11px; letter-spacing:0.03em; color: var(--text-dim);">CO LIMIT (mg/Nm&sup3;)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="sn-table-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. MULTI-PDF COMPLIANCE AUDITOR VIEW -->
+                <section id="pdf-auditor" class="tab-content">
+                    <div class="pdf-auditor-container">
+                        <div class="split-view">
+                            <!-- Left Panel: Drag-and-drop & Queue -->
+                            <div class="glass-panel input-panel">
+                                <div class="panel-header">
+                                    <h3><i class="fa-solid fa-file-pdf"></i> Upload Environmental PDFs</h3>
+                                    <span class="badge badge-green">Supports 1000+ Pages</span>
+                                </div>
+                                
+                                <div class="upload-zone" id="pdf-upload-zone">
+                                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                                    <h4>Drag & Drop multiple PDFs here</h4>
+                                    <p>or click to browse files from your computer</p>
+                                    <span class="upload-limit">Supports EIA reports, Stack Monitoring reports, and CPCB audits</span>
+                                    <input type="file" id="pdf-file-input" multiple accept=".pdf" class="hidden">
+                                </div>
+
+                                <div class="industry-selection-wrapper form-group" style="margin-top: 15px;">
+                                    <label for="pdf-industry-select">Standard Limits to Audit Against</label>
+                                    <select id="pdf-industry-select" class="form-control">
+                                        <option value="thermal-power-new">Thermal Power Plant (Post-2017)</option>
+                                        <option value="thermal-power-old">Thermal Power Plant (Pre-2017)</option>
+                                        <option value="cement-kiln">Cement Plants (Kiln emissions)</option>
+                                        <option value="iron-steel">Iron & Steel (Sinter Plant)</option>
+                                        <option value="oil-refinery">Oil Refinery (FCCU Stacks)</option>
+                                        <option value="sugar-boiler">Sugar Industry (Boilers)</option>
+                                        <option value="brick-kiln">Brick Kiln (Zig-Zag Type)</option>
+                                        <option value="fertilizer-urea">Fertilizer (Urea Plant, Post-1992)</option>
+                                        <option value="pulp-paper">Pulp &amp; Paper Industry</option>
+                                        <option value="aluminium-smelter">Aluminium Smelter (Calcination/Pot Room)</option>
+                                        <option value="glass-industry">Glass Industry</option>
+                                        <option value="lime-kiln">Lime Kiln (5&ndash;40 TPD)</option>
+                                        <option value="industrial-boiler">Industrial Boiler (Small, &lt;2 T/hr)</option>
+                                        <option value="foundry-cupola">Foundry (Cupola Furnace, &lt;3 T/hr)</option>
+                                        <option value="coke-oven">Coke Oven Plant</option>
+                                        <option value="ceramic-industry">Ceramic Industry</option>
+                                        <option value="pharmaceutical">Pharmaceutical (Mfg &amp; Formulation)</option>
+                                        <option value="custom-other">Other / Custom Industry (Manual Limits Only)</option>
+                                    </select>
+                                    <p class="input-help" style="margin-top: 8px; font-size: 11px; color: var(--text-dim);">
+                                        <i class="fa-solid fa-circle-info"></i> Limits sourced from CPCB Schedule VI (EPA, 1986). Where no industry-specific concentration standard exists, the general 150 mg/Nm&sup3; PM standard is applied. Always cross-check against the project's actual EC/CTO consent conditions.
+                                    </p>
+                                </div>
+
+                                <div class="authority-selection-wrapper form-group" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                                    <label for="pdf-authority-add-select"><i class="fa-solid fa-landmark"></i> Regulatory Authority / State Board(s)</label>
+                                    <select id="pdf-authority-add-select" class="form-control">
+                                        <option value="">+ Add an authority to audit against&hellip;</option>
+                                        <option value="cpcb">CPCB &mdash; Central Schedule VI (National Baseline)</option>
+                                        <option value="gpcb">GPCB &mdash; Gujarat Pollution Control Board</option>
+                                        <option value="mpcb">MPCB &mdash; Maharashtra Pollution Control Board</option>
+                                        <option value="tnpcb">TNPCB &mdash; Tamil Nadu Pollution Control Board</option>
+                                        <option value="uppcb">UPPCB &mdash; Uttar Pradesh Pollution Control Board</option>
+                                        <option value="rpcb">RPCB &mdash; Rajasthan Pollution Control Board</option>
+                                        <option value="kspcb">KSPCB &mdash; Karnataka State Pollution Control Board</option>
+                                        <option value="wbpcb">WBPCB &mdash; West Bengal Pollution Control Board</option>
+                                        <option value="appcb-tspcb">APPCB/TSPCB &mdash; Andhra Pradesh / Telangana</option>
+                                        <option value="other-spcb">Other SPCB / UTPCC</option>
+                                    </select>
+                                    <div id="pdf-authority-chips" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;"></div>
+                                    <div id="pdf-authority-notes" style="margin-top:6px;"></div>
+                                </div>
+
+
+                                <div class="override-wrapper form-group" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                                    <label style="display:flex; align-items:center; justify-content:space-between;">
+                                        <span><i class="fa-solid fa-sliders"></i> Manual Limit Override <span style="font-weight:400; color: var(--text-dim);">(optional &mdash; from CTO/EC consent order)</span></span>
+                                    </label>
+                                    <p class="input-help" style="margin: 6px 0 10px; font-size: 11px; color: var(--text-dim);">
+                                        <i class="fa-solid fa-circle-info"></i> If the specific consent order sets a different limit (common for GPCB & other SPCBs in critically polluted / site-specific cases), enter it here in mg/Nm&sup3;. Filled values take precedence over the CPCB Schedule VI defaults above. Leave blank to use the default.
+                                    </p>
+                                    <p class="input-help" style="margin: 0 0 10px; font-size: 11px; color: var(--text-dim);">
+                                        <i class="fa-solid fa-triangle-exclamation" style="color: var(--color-warning);"></i> Figures here are in mg/Nm&sup3; by convention (stack/source emissions), but the same fields are used for ambient air quality readings too (result in &micro;g/m&sup3;, e.g. PM10, PM2.5, NO&#8322; tested against NAAQS) &mdash; just enter the number and treat the unit label as generic. For any <strong>other</strong> chemical, water/effluent, or air parameter not listed here, add it in <strong>Custom Parameters</strong> below instead, where you can also set its own unit.
+                                    </p>
+                                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                        <div>
+                                            <label for="pdf-override-pm" style="font-size:11px; font-weight:500;">PM / PM10 (mg/Nm&sup3;)</label>
+                                            <input type="number" min="0" step="0.1" id="pdf-override-pm" class="form-control" placeholder="Default">
+                                        </div>
+                                        <div>
+                                            <label for="pdf-override-pm25" style="font-size:11px; font-weight:500;">PM2.5 (mg/Nm&sup3;)</label>
+                                            <input type="number" min="0" step="0.1" id="pdf-override-pm25" class="form-control" placeholder="Default">
+                                        </div>
+                                        <div>
+                                            <label for="pdf-override-so2" style="font-size:11px; font-weight:500;">SO&#8322; (mg/Nm&sup3;)</label>
+                                            <input type="number" min="0" step="0.1" id="pdf-override-so2" class="form-control" placeholder="Default">
+                                        </div>
+                                        <div>
+                                            <label for="pdf-override-nox" style="font-size:11px; font-weight:500;">NOx / NO&#8322; (mg/Nm&sup3;)</label>
+                                            <input type="number" min="0" step="0.1" id="pdf-override-nox" class="form-control" placeholder="Default">
+                                        </div>
+                                        <div>
+                                            <label for="pdf-override-co" style="font-size:11px; font-weight:500;">CO (mg/Nm&sup3;)</label>
+                                            <input type="number" min="0" step="0.1" id="pdf-override-co" class="form-control" placeholder="Default">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="custom-params-wrapper form-group" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                                    <label style="display:flex; align-items:center; justify-content:space-between;">
+                                        <span><i class="fa-solid fa-flask"></i> Custom Parameters <span style="font-weight:400; color: var(--text-dim);">(any chemical, water/effluent, or air parameter)</span></span>
+                                        <button type="button" class="btn btn-outline btn-sm" id="btn-add-custom-param-top" style="padding: 4px 12px; font-size: 11px; white-space:nowrap;"><i class="fa-solid fa-plus"></i> Add</button>
+                                    </label>
+                                    <p class="input-help" style="margin: 6px 0 10px; font-size: 11px; color: var(--text-dim);">
+                                        <i class="fa-solid fa-circle-info"></i> Not limited to PM/SO&#8322;/NOx/CO &mdash; add any parameter the report covers (e.g. Fluoride, Mercury, BOD, COD, TSS, pH, Chlorides) with its own unit and limit. These are scanned page-by-page exactly like the built-in parameters.
+                                    </p>
+                                    <div style="display:flex; flex-wrap:wrap; gap: 8px; align-items:end;">
+                                        <div style="flex: 1 1 150px; min-width: 130px;">
+                                            <label for="custom-param-name" style="font-size:10.5px; font-weight:500;">Parameter Name</label>
+                                            <input type="text" id="custom-param-name" class="form-control" placeholder="e.g. Fluoride">
+                                        </div>
+                                        <div style="flex: 1 1 120px; min-width: 110px;">
+                                            <label for="custom-param-category" style="font-size:10.5px; font-weight:500;">Category</label>
+                                            <select id="custom-param-category" class="form-control">
+                                                <option value="air">Air / Stack</option>
+                                                <option value="water">Water / Effluent</option>
+                                                <option value="soil">Soil</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div style="flex: 1 1 100px; min-width: 90px;">
+                                            <label for="custom-param-unit" style="font-size:10.5px; font-weight:500;">Unit</label>
+                                            <input type="text" id="custom-param-unit" class="form-control" placeholder="mg/l, ppm...">
+                                        </div>
+                                        <div style="flex: 1 1 90px; min-width: 80px;">
+                                            <label for="custom-param-limit" style="font-size:10.5px; font-weight:500;">Limit</label>
+                                            <input type="number" min="0" step="0.01" id="custom-param-limit" class="form-control" placeholder="e.g. 2.0">
+                                        </div>
+                                    </div>
+                                    <p class="input-help" style="margin: 6px 0 0; font-size: 10.5px; color: var(--text-dim);">
+                                        <i class="fa-solid fa-keyboard"></i> Tip: press Enter in any field above to add it, then keep typing the next one &mdash; add as many parameters as your report needs.
+                                    </p>
+                                    <div id="custom-params-list" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;"></div>
+                                </div>
+
+                                <div class="company-check-wrapper form-group" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                                    <label for="pdf-expected-company"><i class="fa-solid fa-signature"></i> Expected Proponent / Company Name <span style="font-weight:400; color: var(--text-dim);">(optional)</span></label>
+                                    <input type="text" id="pdf-expected-company" class="form-control" placeholder="e.g. Umiya Corporation Pvt Ltd">
+
+                                    <label for="pdf-company-aliases" style="margin-top: 10px;">Known Aliases <span style="font-weight:400; color: var(--text-dim);">(comma-separated, optional)</span></label>
+                                    <input type="text" id="pdf-company-aliases" class="form-control" placeholder="e.g. Umiya Corp, M/s Umiya Corporation Pvt. Ltd.">
+
+                                    <label for="pdf-company-page-range" style="margin-top: 10px;">Pages to Verify <span style="font-weight:400; color: var(--text-dim);">(e.g. 1-3, 40-50)</span></label>
+                                    <input type="text" id="pdf-company-page-range" class="form-control" placeholder="Leave blank to check every page">
+
+                                    <p class="input-help" style="margin-top: 8px; font-size: 11px; color: var(--text-dim);">
+                                        <i class="fa-solid fa-circle-info"></i> Flags pages where the proponent name is misspelled, inconsistent, or missing entirely &mdash; a common issue in merged annexures and multi-part submissions.
+                                    </p>
+                                </div>
+
+                                <div class="mock-testing-wrapper" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                                    <p class="input-help" style="margin-bottom: 10px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
+                                        <i class="fa-solid fa-circle-info" style="color: var(--color-accent);"></i> No PDF ready? Test with our mock simulation:
+                                    </p>
+                                    <div class="mock-buttons">
+                                        <button type="button" class="btn btn-outline btn-block btn-sm" id="btn-generate-mock-pdf">
+                                            <i class="fa-solid fa-microchip"></i> Audit Mock 800-Page Report (With SO₂ Exceedance)
+                                        </button>
+                                        <button type="button" class="btn btn-outline btn-block btn-sm" id="btn-generate-mock-pdf-compliant" style="margin-top: 8px;">
+                                            <i class="fa-solid fa-shield-halved"></i> Audit Mock 500-Page Compliant Report
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="queue-section" style="margin-top: 20px;">
+                                    <h4 style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 10px; color: var(--text-secondary);">Audit Processing Queue</h4>
+                                    <div class="pdf-queue-list" id="pdf-queue-container" style="background: rgba(6, 10, 8, 0.4); border: 1px solid var(--border-glass); border-radius: 10px; padding: 12px; max-height: 200px; overflow-y: auto;">
+                                        <div class="empty-queue-text" style="font-size: 12px; color: var(--text-dim); text-align: center; padding: 20px 0;">No documents in queue. Upload PDFs or generate a mock to start.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Panel: Scanned Results & Audits -->
+                            <div class="glass-panel results-panel" style="display: flex; flex-direction: column;">
+                                <div class="panel-header">
+                                    <h3><i class="fa-solid fa-list-check"></i> Audit & Rectification Report</h3>
+                                    <div style="display:flex; gap:8px;">
+                                        <button class="btn btn-outline btn-sm" id="btn-refresh-audit" title="Already-uploaded PDFs re-check automatically a moment after you change a limit/authority/custom parameter \u2014 click this to force it immediately" style="padding: 4px 10px; font-size: 11px;"><i class="fa-solid fa-arrows-rotate"></i> Refresh Check</button>
+                                        <button class="btn btn-outline btn-sm" id="btn-clear-reports" style="padding: 4px 10px; font-size: 11px;"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                                    </div>
+                                </div>
+
+                                <div class="audit-results-placeholder" id="pdf-report-placeholder" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+                                    <i class="fa-solid fa-magnifying-glass-chart" style="font-size: 48px; color: var(--text-dim); margin-bottom: 16px;"></i>
+                                    <h4 style="font-family: var(--font-heading); font-size: 16px; color: var(--text-primary); margin-bottom: 6px;">Awaiting Document Scan</h4>
+                                    <p style="font-size: 12px; max-width: 320px; margin: 0 auto;">Queue or upload PDF documents on the left. The AI engine will search pages, extract proponent names, and flag line-by-line exceedance errors.</p>
+                                </div>
+
+                                <div class="pdf-audit-report hidden" id="pdf-report-details" style="flex: 1; display: flex; flex-direction: column;">
+                                    <!-- Meta details -->
+                                    <div class="report-meta-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+                                        <div class="meta-item">
+                                            <span class="label" style="font-size: 11px; color: var(--text-dim); display: block;">Proponent/Company Name:</span>
+                                            <span class="value" id="report-company-name" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Extracting...</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="label" style="font-size: 11px; color: var(--text-dim); display: block;">Document Audited:</span>
+                                            <span class="value" id="report-filename" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Extracting...</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="label" style="font-size: 11px; color: var(--text-dim); display: block;">Industry Audited:</span>
+                                            <span class="value" id="report-industry-type" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Extracting...</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="label" style="font-size: 11px; color: var(--text-dim); display: block;">Total Pages Scanned:</span>
+                                            <span class="value" id="report-page-count" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Extracting...</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="label" style="font-size: 11px; color: var(--text-dim); display: block;">Regulatory Authority:</span>
+                                            <span class="value" id="report-authority" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">CPCB</span>
+                                        </div>
+                                        <div class="meta-item" style="grid-column: 1 / -1;">
+                                            <span class="label" style="font-size: 11px; color: var(--text-dim); display: block;">Effective Limits Applied (mg/Nm&sup3;):</span>
+                                            <span class="value" id="report-effective-limits" style="font-size: 12px; font-weight: 500; color: var(--text-primary);">&mdash;</span>
+                                        </div>
+                                        <div class="meta-item" style="grid-column: 1 / -1;">
+                                            <span class="label" style="font-size: 11px; color: var(--text-dim); display: block;">Last Scanned:</span>
+                                            <span class="value" id="report-last-scanned" style="font-size: 12px; font-weight: 600; color: var(--color-accent);">&mdash;</span>
+                                            <span style="font-size: 10.5px; color: var(--text-dim);"> &mdash; if this doesn't update a moment after you change a limit, hard-refresh the page (Ctrl+Shift+R) to rule out a cached copy of the file.</span>
+                                        </div>
+                                        <div class="meta-item" style="grid-column: 1 / -1;">
+                                            <button type="button" class="btn btn-outline btn-sm" id="btn-view-all-pages" style="font-size: 11px; padding: 6px 12px;"><i class="fa-solid fa-book-open-reader"></i> View All Pages of This PDF</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- PDF Page Preview -->
+                                    <div class="pdf-preview-section hidden" id="pdf-preview-section" style="margin-bottom: 16px; border: 1px solid var(--border-glass); border-radius: 10px; background: rgba(6,10,8,0.3); overflow: hidden;">
+                                        <div style="display:flex; align-items:center; justify-content:space-between; padding: 8px 12px; background: rgba(191,138,61,0.08); border-bottom: 1px solid var(--border-glass); flex-wrap:wrap; gap:6px;">
+                                            <span style="font-size: 12px; font-weight: 600; color: var(--text-primary);"><i class="fa-solid fa-eye"></i> Document Preview &mdash; <span id="pdf-preview-page-label">Page 1</span></span>
+                                            <div style="display:flex; align-items:center; gap: 6px;">
+                                                <button type="button" class="btn btn-outline btn-sm" id="pdf-preview-prev" style="padding: 2px 8px; font-size: 11px;"><i class="fa-solid fa-chevron-left"></i></button>
+                                                <input type="number" min="1" id="pdf-preview-jump-input" class="form-control" style="width:64px; padding:2px 6px; font-size:11px;" placeholder="Pg#">
+                                                <button type="button" class="btn btn-outline btn-sm" id="pdf-preview-jump-btn" style="padding: 2px 8px; font-size: 11px;">Go</button>
+                                                <button type="button" class="btn btn-outline btn-sm" id="pdf-preview-next" style="padding: 2px 8px; font-size: 11px;"><i class="fa-solid fa-chevron-right"></i></button>
+                                                <button type="button" class="btn btn-outline btn-sm" id="pdf-preview-close" style="padding: 2px 8px; font-size: 11px;"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                        </div>
+                                        <div id="pdf-preview-flagged-pages" style="display:flex; flex-wrap:wrap; gap:4px; padding:8px 12px; border-bottom: 1px solid var(--border-glass); background: rgba(255,255,255,0.015);"></div>
+                                        <div id="pdf-preview-page-issues" style="padding: 6px 12px; font-size: 11px; color: var(--color-danger); display:none;"></div>
+                                        <div style="max-height: 420px; overflow: auto; text-align:center; padding: 10px; background: repeating-conic-gradient(rgba(255,255,255,0.02) 0% 25%, transparent 0% 50%) 50% / 20px 20px;">
+                                            <div style="position:relative; display:inline-block;">
+                                                <canvas id="pdf-preview-canvas" style="max-width:100%; box-shadow: 0 4px 20px rgba(0,0,0,0.4); display:block;"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Proponent Name Verification -->
+                                    <div class="company-check-section" id="pdf-company-check-section" style="display:none; margin-bottom: 16px;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                                            <h4 style="font-family: var(--font-heading); font-size: 14px; color: var(--text-secondary); margin:0;">
+                                                <i class="fa-solid fa-signature"></i> Proponent Name Verification
+                                            </h4>
+                                            <span id="company-check-summary" style="font-size: 11px; color: var(--text-dim);"></span>
+                                        </div>
+                                        <div class="table-responsive-wrapper" id="company-check-table-wrapper" style="border: 1px solid var(--border-glass); border-radius: 10px; background: rgba(6,10,8,0.2); max-height: 180px; overflow-y:auto;">
+                                            <table class="premium-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+                                                <thead style="background: rgba(191, 138, 61, 0.08); position: sticky; top: 0; z-index: 10;">
+                                                    <tr>
+                                                        <th style="padding: 8px 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Page</th>
+                                                        <th style="padding: 8px 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Expected</th>
+                                                        <th style="padding: 8px 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Found on Page</th>
+                                                        <th style="padding: 8px 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="company-check-tbody"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Overall Banner -->
+                                    <div class="status-banner success" id="pdf-report-banner" style="margin-bottom: 16px;">
+                                        <div class="banner-icon"><i class="fa-solid fa-circle-check"></i></div>
+                                        <div class="banner-text">
+                                            <h4 id="pdf-banner-title">Document Fully Compliant</h4>
+                                            <p id="pdf-banner-desc">No stack emission limitations exceeded in the document.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Errors & Rectifications Table -->
+                                    <div class="violations-table-section" id="pdf-violations-section" style="flex: 1; display: flex; flex-direction: column;">
+                                        <h4 style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 10px; color: var(--text-secondary);">Flagged Emission Exceedances & Rectification Plans</h4>
+                                        <div class="table-responsive-wrapper" style="flex: 1; overflow-y: auto; max-height: 250px; border: 1px solid var(--border-glass); border-radius: 10px; background: rgba(6,10,8,0.2);">
+                                            <table class="premium-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
+                                                <thead style="background: rgba(16, 185, 129, 0.08); position: sticky; top: 0; z-index: 10;">
+                                                    <tr>
+                                                        <th style="padding: 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Parameter</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Measured</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Limit</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Location</th>
+                                                        <th style="padding: 10px; border-bottom: 1px solid var(--border-glass); font-family: var(--font-heading); font-weight: 600; color: var(--text-primary);">Line & Rectification Action Plan</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="pdf-violations-tbody">
+                                                    <!-- Dynamic rows of errors -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        // Set worker Src for pdf.js loading
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    </script>
+    <!-- Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet.js Map script from CDN -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Tesseract.js — OCR fallback for scanned/image-only PDF pages (loaded lazily by the
+         PDF Auditor only when a page has no extractable text layer) -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <!-- Custom Application Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
